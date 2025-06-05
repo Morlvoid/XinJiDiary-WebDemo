@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心迹日记 - InnerTrace-XinJiDiary</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #6a5acd;
+            --secondary: #9370db;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --border-radius: 12px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+        
+        .logo h1 {
+            font-size: 2.8rem;
+            color: var(--primary);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin-top: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .app-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .template-selector {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+        
+        .template-selector h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .template-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .template-item {
+            padding: 15px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid #eaeaea;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .template-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+            border-color: var(--secondary);
+        }
+        
+        .template-item.active {
+            border-color: var(--primary);
+            background: rgba(106, 90, 205, 0.08);
+        }
+        
+        .template-item i {
+            font-size: 1.4rem;
+            color: var(--primary);
+        }
+        
+        .template-content {
+            flex: 2;
+            min-width: 300px;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .template-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .template-title {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+        
+        .date-display {
+            color: #777;
+            font-size: 1rem;
+        }
+        
+        .template-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-group input, 
+        .form-group textarea, 
+        .form-group select {
+            padding: 12px 15px;
+            border: 2px solid #eaeaea;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus, 
+        .form-group textarea:focus, 
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(147, 112, 219, 0.2);
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            justify-content: flex-end;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a4ab5;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            background: var(--success);
+            color: white;
+            font-weight: 500;
+            box-shadow: var(--shadow);
+            transform: translateX(120%);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .mood-comfort {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .nine-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .grid-item {
+            aspect-ratio: 1/1;
+            background: #f0f0f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid #eaeaea;
+        }
+        
+        .grid-item:hover {
+            transform: scale(1.03);
+        }
+        
+        .grid-item.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 8px rgba(106, 90, 205, 0.3);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 25px 0;
+            color: #777;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .logo h1 {
+                font-size: 2.2rem;
+            }
+            
+            .template-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>心迹日记 · WebDemo</h1>
+            </div>
+            <p class="tagline">记录自己 · 观察自己 · 发现自己 · 提升自己</p>
+        </header>
+        
+        <div class="app-container">
+            <div class="template-selector">
+                <h2>日记模板</h2>
+                <div class="template-list">
+                    <div class="template-item active" data-template="learning">
+                        <i class="fas fa-graduation-cap"></i>
+                        <div>
+                            <h3>学习模板</h3>
+                            <p>记录每日学习情况与心得</p>
+                        </div>
+                    </div>
+                    <div class="template-item" data-template="weight-loss">
+                        <i class="fas fa-weight-scale"></i>
+                        <div>
+                            <h3>减肥模板</h3>
+                            <p>追踪体重变化与健身计划</p>
+                        </div>
+                    </div>
+                    <div class="template-item" data-template="mood-healing">
+                        <i class="fas fa-heart"></i>
+                        <div>
+                            <h3>心情自愈模板</h3>
+                            <p>疏导情绪，自我疗愈</p>
+                        </div>
+                    </div>
+                    <div class="template-item" data-template="mood-daily">
+                        <i class="fas fa-cloud-sun"></i>
+                        <div>
+                            <h3>21天心情记录</h3>
+                            <p>追踪情绪变化模式</p>
+                        </div>
+                    </div>
+                    <div class="template-item" data-template="nine-grid">
+                        <i class="fas fa-th-large"></i>
+                        <div>
+                            <h3>九宫格健康指南</h3>
+                            <p>每日健康小目标打卡</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="template-content">
+                <div class="template-header">
+                    <h2 class="template-title">学习日记</h2>
+                    <div class="date-display" id="current-date">2025年6月5日 星期三</div>
+                </div>
+                
+                <div class="template-form" id="template-form">
+                    <!-- 学习模板 -->
+                    <div class="template" id="learning-template">
+                        <div class="form-group">
+                            <label for="study-content">今天的学习内容：</label>
+                            <textarea id="study-content" placeholder="记录今天学习了哪些内容..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="study-duration">学习时长：</label>
+                            <input type="number" id="study-duration" placeholder="输入学习小时数">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="study-notes">学习心得：</label>
+                            <textarea id="study-notes" placeholder="记录学习中的感悟和收获..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- 其他模板在JS中动态渲染 -->
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" id="clear-btn">
+                        <i class="fas fa-eraser"></i> 清空
+                    </button>
+                    <button class="btn btn-primary" id="save-btn">
+                        <i class="fas fa-save"></i> 保存日记
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>心迹日记 - InnerTrace-XinJiDiary &copy; 2025 @ Morlvoid  | 用心对待自己，记录自己，观察自己，注重自己，让自己变得更好</p>
+            <p>提示：此Demo版使用浏览器本地存储，数据不会上传到云端</p>
+        </footer>
+    </div>
+    
+    <div class="notification" id="notification">日记已保存！</div>
+    
+    <script>
+        // 设置当前日期
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        document.getElementById('current-date').textContent = now.toLocaleDateString('zh-CN', options);
+        
+        // 模板数据
+        const templates = {
+            learning: {
+                title: "学习日记",
+                fields: `
+                    <div class="form-group">
+                        <label for="study-content">今天的学习内容：</label>
+                        <textarea id="study-content" placeholder="记录今天学习了哪些内容..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="study-duration">学习时长：</label>
+                        <input type="number" id="study-duration" placeholder="输入学习小时数">
+                    </div>
+                    <div class="form-group">
+                        <label for="study-notes">学习心得：</label>
+                        <textarea id="study-notes" placeholder="记录学习中的感悟和收获..."></textarea>
+                    </div>
+                `
+            },
+            'weight-loss': {
+                title: "减肥日记",
+                fields: `
+                    <div class="form-group">
+                        <label for="weight-today">今日体重（kg）：</label>
+                        <input type="number" step="0.1" id="weight-today" placeholder="输入当前体重">
+                    </div>
+                    <div class="form-group">
+                        <label for="food-intake">今日饮食记录：</label>
+                        <textarea id="food-intake" placeholder="记录今天吃了什么..."></textarea>
+                        <small style="color:#777;">自动估算卡路里：约 0 大卡</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="today-mood">今日心情：</label>
+                        <select id="today-mood">
+                            <option value="">-- 选择心情 --</option>
+                            <option value="happy">😊 开心</option>
+                            <option value="normal">😐 一般</option>
+                            <option value="sad">😔 低落</option>
+                            <option value="angry">😠 生气</option>
+                        </select>
+                        <div class="mood-comfort" id="mood-comfort">
+                            <i class="fas fa-heart"></i> 无论今天发生了什么，明天都是新的开始，要对自己温柔一点哦！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exercise">今日锻炼项目：</label>
+                        <input type="text" id="exercise" placeholder="例如：跑步、瑜伽等">
+                    </div>
+                    <div class="form-group">
+                        <label for="exercise-duration">锻炼时长（分钟）：</label>
+                        <input type="number" id="exercise-duration" placeholder="输入锻炼时长">
+                    </div>
+                    <div class="form-group">
+                        <label for="target-weight">明天目标体重（kg）：</label>
+                        <input type="number" step="0.1" id="target-weight" placeholder="输入目标体重">
+                    </div>
+                `
+            },
+            'mood-healing': {
+                title: "心情自愈日记",
+                fields: `
+                    <div class="form-group">
+                        <label for="angry-today">今天生气了吗？</label>
+                        <select id="angry-today">
+                            <option value="">-- 选择 --</option>
+                            <option value="yes">是的，我生气了</option>
+                            <option value="no">没有生气</option>
+                        </select>
+                        <div class="mood-comfort" id="anger-comfort">
+                            <i class="fas fa-heart"></i> 情绪是暂时的，它不会定义你。给自己一点时间和空间恢复平静。
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="anger-reason">因为什么事情而生气：</label>
+                        <textarea id="anger-reason" placeholder="描述让你生气的事情..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="sad-reason">因为什么事情而难过：</label>
+                        <textarea id="sad-reason" placeholder="描述让你难过的事情..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="anger-action">生气后做了什么：</label>
+                        <textarea id="anger-action" placeholder="记录生气后的行为和反应..."></textarea>
+                    </div>
+                `
+            },
+            'mood-daily': {
+                title: "每日心情日记",
+                fields: `
+                    <div class="form-group">
+                        <label for="daily-weather">今日天气：</label>
+                        <select id="daily-weather">
+                            <option value="">-- 选择天气 --</option>
+                            <option value="sunny">☀️ 晴天</option>
+                            <option value="cloudy">☁️ 多云</option>
+                            <option value="rainy">🌧️ 雨天</option>
+                            <option value="snowy">❄️ 雪天</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="daily-mood">今日心情：</label>
+                        <select id="daily-mood">
+                            <option value="">-- 选择心情 --</option>
+                            <option value="happy">😊 开心</option>
+                            <option value="normal">😐 一般</option>
+                            <option value="sad">😔 低落</option>
+                            <option value="angry">😠 生气</option>
+                        </select>
+                        <div class="mood-comfort" id="daily-comfort">
+                            <i class="fas fa-heart"></i> 记录下今天的心情吧～
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="daily-events">今日发生了什么：</label>
+                        <textarea id="daily-events" placeholder="记录今天的重要事件..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="mood-reason">今日心情不好的原因：</label>
+                        <textarea id="mood-reason" placeholder="分析影响心情的原因..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="happy-action">做了什么事情让自己开心：</label>
+                        <textarea id="happy-action" placeholder="记录让自己开心的事情..."></textarea>
+                    </div>
+                `
+            },
+            'nine-grid': {
+                title: "九宫格健康指南",
+                fields: `
+                    <div class="form-group">
+                        <p>点亮你今天完成的健康小事情：</p>
+                        <div class="nine-grid">
+                            <div class="grid-item" data-item="sun">晒太阳</div>
+                            <div class="grid-item" data-item="pet">摸摸小动物</div>
+                            <div class="grid-item" data-item="outdoor">出门</div>
+                            <div class="grid-item" data-item="hobby">做喜欢的事</div>
+                            <div class="grid-item" data-item="sleep">不熬夜</div>
+                            <div class="grid-item" data-item="praise">夸夸自己</div>
+                            <div class="grid-item" data-item="water">喝两杯水</div>
+                            <div class="grid-item" data-item="plant">看看绿色植物</div>
+                            <div class="grid-item" data-item="walk">散步</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nine-notes">今日健康感悟：</label>
+                        <textarea id="nine-notes" placeholder="记录今天的健康心得..."></textarea>
+                    </div>
+                `
+            }
+        };
+        
+        // DOM元素
+        const templateItems = document.querySelectorAll('.template-item');
+        const templateTitle = document.querySelector('.template-title');
+        const templateForm = document.getElementById('template-form');
+        const saveBtn = document.getElementById('save-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const notification = document.getElementById('notification');
+        
+        // 初始化
+        let currentTemplate = 'learning';
+        
+        // 模板切换
+        templateItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // 更新活动状态
+                templateItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                
+                // 获取模板ID
+                currentTemplate = item.dataset.template;
+                
+                // 更新模板内容
+                templateTitle.textContent = templates[currentTemplate].title;
+                templateForm.innerHTML = templates[currentTemplate].fields;
+                
+                // 加载保存的数据
+                loadSavedData();
+                
+                // 添加特殊事件监听
+                setupTemplateEvents();
+            });
+        });
+        
+        // 设置模板特定事件
+        function setupTemplateEvents() {
+            // 心情安慰语显示逻辑
+            if (document.getElementById('today-mood')) {
+                document.getElementById('today-mood').addEventListener('change', function() {
+                    const comfort = document.getElementById('mood-comfort');
+                    if (this.value === 'sad' || this.value === 'angry') {
+                        comfort.style.display = 'block';
+                    } else {
+                        comfort.style.display = 'none';
+                    }
+                });
+            }
+            
+            if (document.getElementById('angry-today')) {
+                document.getElementById('angry-today').addEventListener('change', function() {
+                    const comfort = document.getElementById('anger-comfort');
+                    if (this.value === 'yes') {
+                        comfort.style.display = 'block';
+                    } else {
+                        comfort.style.display = 'none';
+                    }
+                });
+            }
+            
+            if (document.getElementById('daily-mood')) {
+                document.getElementById('daily-mood').addEventListener('change', function() {
+                    const comfort = document.getElementById('daily-comfort');
+                    if (this.value) {
+                        comfort.style.display = 'block';
+                        comfort.innerHTML = `<i class="fas fa-heart"></i> ${this.value === 'sad' || this.value === 'angry' ? 
+                            '心情不好也没关系，给自己一点时间和空间恢复平静。' : 
+                            '记录下今天的心情吧～'}`;
+                    } else {
+                        comfort.style.display = 'none';
+                    }
+                });
+            }
+            
+            // 九宫格点击事件
+            const gridItems = document.querySelectorAll('.grid-item');
+            if (gridItems.length > 0) {
+                gridItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        this.classList.toggle('active');
+                    });
+                });
+            }
+        }
+        
+        // 保存数据到localStorage
+        function saveData() {
+            const data = {};
+            
+            if (currentTemplate === 'nine-grid') {
+                // 处理九宫格数据
+                const completed = [];
+                document.querySelectorAll('.grid-item.active').forEach(item => {
+                    completed.push(item.dataset.item);
+                });
+                data.completedItems = completed;
+                data.notes = document.getElementById('nine-notes').value;
+            } else {
+                // 处理表单数据
+                const inputs = templateForm.querySelectorAll('input, textarea, select');
+                inputs.forEach(input => {
+                    data[input.id] = input.value;
+                });
+            }
+            
+            localStorage.setItem(`journal_${currentTemplate}`, JSON.stringify(data));
+            
+            // 显示通知
+            showNotification('日记已保存！');
+        }
+        
+        // 从localStorage加载数据
+        function loadSavedData() {
+            const savedData = localStorage.getItem(`journal_${currentTemplate}`);
+            if (!savedData) return;
+            
+            const data = JSON.parse(savedData);
+            
+            if (currentTemplate === 'nine-grid') {
+                // 处理九宫格数据
+                if (data.completedItems) {
+                    data.completedItems.forEach(item => {
+                        const el = document.querySelector(`.grid-item[data-item="${item}"]`);
+                        if (el) el.classList.add('active');
+                    });
+                }
+                if (data.notes) {
+                    document.getElementById('nine-notes').value = data.notes;
+                }
+            } else {
+                // 处理表单数据
+                for (const key in data) {
+                    const el = document.getElementById(key);
+                    if (el) el.value = data[key];
+                }
+                
+                // 触发change事件以显示安慰语
+                if (document.getElementById('today-mood') && data['today-mood']) {
+                    document.getElementById('today-mood').value = data['today-mood'];
+                    document.getElementById('today-mood').dispatchEvent(new Event('change'));
+                }
+                
+                if (document.getElementById('angry-today') && data['angry-today']) {
+                    document.getElementById('angry-today').value = data['angry-today'];
+                    document.getElementById('angry-today').dispatchEvent(new Event('change'));
+                }
+                
+                if (document.getElementById('daily-mood') && data['daily-mood']) {
+                    document.getElementById('daily-mood').value = data['daily-mood'];
+                    document.getElementById('daily-mood').dispatchEvent(new Event('change'));
+                }
+            }
+        }
+        
+        // 清空表单
+        function clearForm() {
+            if (confirm('确定要清空当前日记内容吗？')) {
+                if (currentTemplate === 'nine-grid') {
+                    document.querySelectorAll('.grid-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    document.getElementById('nine-notes').value = '';
+                } else {
+                    const inputs = templateForm.querySelectorAll('input, textarea, select');
+                    inputs.forEach(input => {
+                        input.value = '';
+                    });
+                    
+                    // 隐藏安慰语
+                    const comforts = document.querySelectorAll('.mood-comfort');
+                    comforts.forEach(c => c.style.display = 'none');
+                }
+                
+                // 移除保存的数据
+                localStorage.removeItem(`journal_${currentTemplate}`);
+                
+                showNotification('日记已清空');
+            }
+        }
+        
+        // 显示通知
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // 初始化事件监听
+        saveBtn.addEventListener('click', saveData);
+        clearBtn.addEventListener('click', clearForm);
+        
+        // 页面加载时初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSavedData();
+            setupTemplateEvents();
+            
+            // 离开页面提示
+            window.addEventListener('beforeunload', (e) => {
+                // 这里简化处理，实际应用中需要检查表单是否有内容
+                e.preventDefault();
+                e.returnValue = '您有未保存的日记内容，确定要离开吗？';
+            });
+        });
+    </script>
+</body>
+</html>
