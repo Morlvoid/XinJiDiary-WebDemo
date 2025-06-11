@@ -16,6 +16,8 @@
 <br>
 
 ## 🚀 如何试用
+https://xin-ji-diary-web-demo.vercel.app/
+---
 
 ```
 git clone git@github.com:Morlvoid/XinJiDiary-WebDemo.git
