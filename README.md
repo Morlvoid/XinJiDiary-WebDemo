@@ -16,7 +16,7 @@
 <br>
 
 ## 🚀 如何试用
-https://xin-ji-diary-web-demo.vercel.app/
+http://xinjidiary.morlvoid.pro/
 ---
 
 ```
